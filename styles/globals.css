@@ -4,6 +4,6 @@
 
 html,
 body,
-div#__next > div {
+div#__next{
   height: 100%;
 }

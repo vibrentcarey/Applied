@@ -23,16 +23,7 @@ const Jobs = () => {
               <SiIndeed />
             </td>
             <td>12/16/2020</td>
-            <td>
-              <select className="select select-xs max-w-xs select-primary">
-                <option disabled selected>
-                  Status
-                </option>
-                <option>Pending</option>
-                <option>Not Accepted</option>
-                <option>Interview</option>
-              </select>
-            </td>
+            <td>Pending</td>
           </tr>
           <tr>
             <th>2</th>
@@ -42,16 +33,7 @@ const Jobs = () => {
               <SiLinkedin />
             </td>
             <td>12/5/2020</td>
-            <td>
-              <select className="select select-xs max-w-xs select-primary">
-                <option disabled selected>
-                  Status
-                </option>
-                <option>Pending</option>
-                <option>Not Accepted</option>
-                <option>Interview</option>
-              </select>
-            </td>
+            <td>Not Accepted</td>
           </tr>
         </tbody>
         <tfoot>
