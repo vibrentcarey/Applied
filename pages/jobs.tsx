@@ -11,6 +11,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import RiseLoader from "react-spinners/RiseLoader";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Modal from "../components/Modal";
+import Link from "next/link";
 const Jobs = ({ session }) => {
   const [habits, setHabits] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ const Jobs = ({ session }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [modalId, setModalId] = useState(null);
   const [modalMode, setModalMode] = useState("");
-
+  const [select, setSelect] = useState("pending");
   const router = useRouter();
 
   const loadData = async (email) => {
@@ -71,15 +72,45 @@ const Jobs = ({ session }) => {
     setShowModal(false);
   };
 
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    
+    setSelect(event.target.value);
+  };
+
+  const confirmEdit = (id) => {
+    setModalId(id);
+    setModalMode("edit");
+    setModalMessage(
+      <select class="select select-sm max-w-xs select-primary" onChange={handleChange}>
+        <option disabled >
+          Update Status
+        </option>
+        <option value='pending'>Pending</option>
+        <option value='not'>Not Accepted</option>
+        <option value='interview'>Interview</option>
+      </select>
+    );
+    setShowModal(true);
+  };
+
+ 
+
   const deleteJob = (id) => {
     axios
       .delete("/api/handlers", { data: { id, user: session.user.email } })
-      .then((res) => console.log(res));
+      .then((res) => {
+        loadData(session.user.email);
+        closeModal();
+      });
   };
 
   const submit = (id) => {
     if (modalMode === "delete") {
       deleteJob(id);
+    }
+    if (modalMode === "edit") {
+      // editJob(id);
     }
   };
   return (
@@ -132,7 +163,10 @@ const Jobs = ({ session }) => {
                     </td>
                     <td className="text-primary">Pending</td>
                     <td>
-                      <FaEdit className="hover:cursor-pointer" />
+                      <FaEdit
+                        className="hover:cursor-pointer"
+                        onClick={() => confirmEdit(habit.id)}
+                      />
                     </td>
                     <td>
                       <FaTrashAlt
@@ -159,6 +193,15 @@ const Jobs = ({ session }) => {
             </tfoot>
           </table>
         </div>
+      )}
+      {habits.length === 0 && (
+        <p className="text-center m-4">
+          Nothing here -{" "}
+          <button className="link link-primary">
+            {" "}
+            <Link href="/add">Add Application</Link>
+          </button>
+        </p>
       )}
     </div>
   );

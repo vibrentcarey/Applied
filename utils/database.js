@@ -45,7 +45,7 @@ export async function addHabit(req, res) {
 }
 
 export async function deleteHabit(req, res) {
-  console.log(req.body)
+
   const { title, user } = req.body;
   try {
     // Connecting to the database
@@ -70,31 +70,15 @@ export async function deleteHabit(req, res) {
 }
 
 export async function updateHabit(req, res) {
-  const { title, user, reason, resource } = req.body;
+  const { id, user, status } = req.body;
   try {
     // connect to the database
     const { db } = await connectToDatabase();
     // update the length of streak 
-    if (!reason && !resource) {
-      await db.collection('habits').updateOne(
-        { title },
-        { $set: { length: 0 } }
-      );
-    }
-    // add a new reason to the reasons array
-    if (req.body.reason) {
-      await db.collection('habits').updateOne(
-        { title, user },
-        { $push: { reason } }
-      )
-    }
-    // add a new resource to the resource array
-    if (req.body.resource) {
-      await db.collection('habits').updateOne(
-        { title, user },
-        { $push: { resources: { title: resource.title, resourceLink: resource.resourceLink } } }
-      )
-    }
+    await db.collection('habits').updateOne(
+      { title, user },
+      { $set: { status: status } }
+    );
     // return a message
     return res.json({
       message: 'Habit updated successfully',
