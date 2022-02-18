@@ -1,9 +1,11 @@
 import React from "react";
+import PageWrapper from "../components/PageWrapper";
 
 const Add = () => {
   return (
-    <section className="flex h-full justify-center items-center">
-      <form className="card w-96 bg-base-100 shadow-xl my-8 border max-h-min">
+    <section className="flex flex-col h-full  items-center">
+       <h1  className="mt-8 text-center text-4xl font-bold">Add Job</h1>
+      <form className="card w-96 bg-base-100 shadow-xl my-20 border max-h-min">
         <div className="card-body prose">
           <h2 className="card-title">Add Job Application</h2>
           <label htmlFor="start">Job:</label>

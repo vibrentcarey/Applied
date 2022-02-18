@@ -3,7 +3,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <article className="hero min-h-screen bg-base-200">
+    <article className="hero min-h-screen">
       <div className="text-center hero-content prose">
         <div className="max-w-xs">
           <h1 className="font-bold">Welcome To Applied</h1>
