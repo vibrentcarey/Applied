@@ -2,8 +2,9 @@ import React from "react";
 
 const Add = () => {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl prose">
-      <div className="card-body">
+    <section className="flex h-full justify-center items-center">
+    <form className="card w-96 bg-base-100 shadow-xl my-8 border max-h-min">
+      <div className="card-body prose">
         <h2 className="card-title">Add Job Application</h2>
         <label htmlFor="start">Job:</label>
         <input
@@ -36,7 +37,8 @@ const Add = () => {
           <button className="btn btn-primary btn-sm mt-4">Submit</button>
         </div>
       </div>
-    </div>
+    </form>
+    </section>
   );
 };
 
