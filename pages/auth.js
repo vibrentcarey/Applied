@@ -38,7 +38,7 @@ const Auth = ({ session }) => {
     if (session) {
       router.replace('/')
     }
-  }, [session, router])
+  }, [session])
 
   async function login(email, password) {
     const result = await signIn('credentials', {
@@ -58,11 +58,14 @@ const Auth = ({ session }) => {
     <div className="hero min-h-screen bg-base-200">
       <div className="flex-col hero-content lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">{loginMode ? 'Login' : 'Sign Up'} Now!</h1>
+          <h1 className="text-5xl text-primary font-bold">Applied</h1>
           <p className="py-6">Once you are logged in you can begin tracking all of your job applications in one convenient place.</p>
         </div>
-        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-28">
           <form onSubmit={formik.handleSubmit} className="card-body">
+          <header className='prose'>
+          <h2>{loginMode ? 'Login' : 'Sign Up'} Now!</h2>
+          </header>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>

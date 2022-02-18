@@ -1,9 +1,14 @@
-import React from "react";
-import { MdLibraryAdd, MdTableChart, MdOutlineLogout } from "react-icons/md";
+import React, { useEffect } from "react";
+
+import { MdLibraryAdd, MdTableChart, MdOutlineLogout, MdLock } from "react-icons/md";
 import { signOut } from "next-auth/client";
 import Link from "next/link";
+import { useSession } from "next-auth/client";
+
 
 const Header = () => {
+  const [session, loading] = useSession();
+
   const confirmLogout = () => {
     signOut();
   };
@@ -16,19 +21,25 @@ const Header = () => {
       </div>
       <div className="navbar-center"></div>
       <div className="navbar-end">
-        <Link href="/add" passHref>
-          <button className="btn btn-ghost text-2xl">
-            <MdLibraryAdd />
-          </button>
-        </Link>
-        <Link href="/jobs" passHref>
-          <button className="btn btn-ghost text-2xl">
-            <MdTableChart />
-          </button>
-        </Link>
-        <button className="btn btn-ghost text-2xl" onClick={confirmLogout}>
-          <MdOutlineLogout />
-        </button>
+        {session ? (
+          <>
+            <Link href="/add" passHref>
+              <button className="btn btn-ghost text-2xl">
+                <MdLibraryAdd />
+              </button>
+            </Link>
+            <Link href="/jobs" passHref>
+              <button className="btn btn-ghost text-2xl">
+                <MdTableChart />
+              </button>
+            </Link>
+            <button className="btn btn-ghost text-2xl" onClick={confirmLogout}>
+              <MdOutlineLogout />
+            </button>
+          </>
+        ) : (
+          <MdLock className="text-2xl mr-8 sm:mr-12"/>
+        )}
       </div>
     </div>
   );

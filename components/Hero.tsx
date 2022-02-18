@@ -5,8 +5,8 @@ const Hero = () => {
   return (
     <article className="hero min-h-screen">
       <div className="text-center hero-content prose">
-        <div className="max-w-xs">
-          <h1 className="font-bold">Welcome To Applied</h1>
+        <div className="max-w-lg">
+          <h1 className="font-bold text-primary">Why Applied?</h1>
           <p className="">
             Applying to jobs is stressful enough, there should be a convenient
             place to manage all of your applications. Applied allows you to keep

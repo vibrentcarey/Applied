@@ -1,6 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { SiIndeed, SiLinkedin } from "react-icons/si";
-const Jobs = () => {
+import { getSession } from "next-auth/client";
+import { useRouter } from "next/router";
+
+const Jobs = ({session}) => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+    } else {
+      router.replace("/auth");
+    }
+  }, [session, router]);
+  
   return (
     <div className="">
         <h1  className="my-8 text-center text-4xl font-bold">Your Jobs</h1>
@@ -25,7 +38,7 @@ const Jobs = () => {
                 <SiIndeed />
               </td>
               <td>12/16/2020</td>
-              <td>Pending</td>
+              <td className="text-primary">Pending</td>
             </tr>
             <tr>
               <th>2</th>
@@ -35,7 +48,7 @@ const Jobs = () => {
                 <SiLinkedin />
               </td>
               <td>12/5/2020</td>
-              <td>Not Accepted</td>
+              <td className="text-secondary">Not Accepted</td>
             </tr>
           </tbody>
           <tfoot>
@@ -55,3 +68,11 @@ const Jobs = () => {
 };
 
 export default Jobs;
+
+export async function getServerSideProps(ctx) {
+  return {
+    props: {
+      session: await getSession(ctx),
+    },
+  };
+}
