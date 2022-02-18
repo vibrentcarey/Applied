@@ -63,7 +63,7 @@ const Jobs = ({ session }) => {
         </td>
       );
     } else {
-      return <td>{text}</td>;
+      return <td className="capitalize">{text}</td>;
     }
   };
 
@@ -89,7 +89,7 @@ const Jobs = ({ session }) => {
     setModalMessage(
       <select
         class="select select-sm max-w-xs select-primary"
-        onChange={handleChange}
+        onChange={handleChange} defaultValue={selectStatus}
       >
         <option disabled>Update Status</option>
         <option value="pending">Pending</option>
@@ -168,9 +168,9 @@ const Jobs = ({ session }) => {
               {habits &&
                 habits.map((habit, i) => (
                   <tr key={habit}>
-                    <th>{i + 1}</th>
-                    <td>{habit.job}</td>
-                    <td>{habit.company}</td>
+                    <th >{i + 1}</th>
+                    <td className="capitalize">{habit.job}</td>
+                    <td className="capitalize">{habit.company}</td>
                     {textToLogo(habit.platform)}
                     <td>12/16/2020</td>
                     <td>
