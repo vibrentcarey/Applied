@@ -13,7 +13,7 @@ export default function Home({ session }) {
     } else {
       router.replace("/auth");
     }
-  }, [session]);
+  }, [session, router]);
   return (
 
     <main>
