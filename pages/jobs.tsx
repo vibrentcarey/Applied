@@ -1,14 +1,26 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import { SiIndeed, SiLinkedin } from "react-icons/si";
 import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
 const Jobs = ({session}) => {
+  const [habits, setHabits] = useState<any[]>([]);
 
   const router = useRouter();
 
+  const loadData = async (email) => {
+    try {
+      const response = await axios.get(`/api/handlers?user=${email}`);
+      setHabits(response.data.message);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+console.log(habits)
   useEffect(() => {
     if (session) {
+      loadData(session.user.email);
     } else {
       router.replace("/auth");
     }
