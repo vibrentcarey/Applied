@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
-import uuid from 'react-uuid'
+import uuid from "react-uuid";
 const Add = ({ session }) => {
   const router = useRouter();
 
@@ -24,13 +24,14 @@ const Add = ({ session }) => {
     } else {
       router.replace("/auth");
     }
-  }, [session, router,]);
+  }, [session, router]);
 
   const formik = useFormik({
     initialValues: {
       job: "",
       company: "",
-      platform: "",
+      platform: "indeed",
+      otherPlatform: "",
       link: "",
       date: "",
     },
@@ -46,6 +47,9 @@ const Add = ({ session }) => {
         .min(3, "Must have 3 characters")
         .max(30, "Must be 20 characters or less")
         .required("Reason is required"),
+      otherPlatform: Yup.string()
+        .min(3, "Must have 3 characters")
+        .max(30, "Must be 20 characters or less"),
       link: Yup.string()
         .min(5, "Must have 5 characters")
         .required("Link is required"),
@@ -58,16 +62,22 @@ const Add = ({ session }) => {
         job: values.job,
         company: values.company,
         platform: values.platform,
+        otherPlatform: values.otherPlatform,
         link: values.link,
         date: values.date,
         user: session.user.email,
+        status: "pending",
       };
       createHabit(streakInfo);
     },
   });
+
+
   return (
     <section className="flex flex-col items-center ">
-      <h1 className="mt-8 text-center text-4xl font-bold text-primary">Add Application</h1>
+      <h1 className="mt-8 text-center text-4xl font-bold text-primary">
+        Add Application
+      </h1>
       <form
         className="card w-full bg-base-100 shadow-xl mt-8 mb-20 border max-w-xs md:max-w-sm"
         onSubmit={formik.handleSubmit}
@@ -78,7 +88,7 @@ const Add = ({ session }) => {
           <input
             type="text"
             placeholder="Enter job title"
-            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
             value={formik.values.job}
             onChange={formik.handleChange}
             id="job"
@@ -87,27 +97,38 @@ const Add = ({ session }) => {
           <input
             type="text"
             placeholder="Enter company name"
-            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
             value={formik.values.company}
             onChange={formik.handleChange}
             id="company"
           />
 
           <label htmlFor="start">Platform:</label>
-          <input
-            type="text"
-            placeholder="Enter website name"
-            className="input input-bordered input-primary input-sm w-full max-w-xs"
-            value={formik.values.platform}
+          <select
+            className="select select-sm max-w-xs select-primary"
             onChange={formik.handleChange}
             id="platform"
-          />
+          >
+            <option disabled>Hiring Platform</option>
+            <option value="indeed">Indeed</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="glassdoor">Glassdoor</option>
+            <option value="other">Other</option>
+          </select>
+          {formik.values.platform === "other" && (
+            <input
+              className="input input-primary input-sm"
+              id="otherPlatform"
+              onChange={formik.handleChange}
+              placeholder="Please specify"
+            />
+          )}
 
           <label htmlFor="start">Link:</label>
           <input
             type="text"
             placeholder="Enter job url"
-            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
             value={formik.values.link}
             onChange={formik.handleChange}
             id="link"

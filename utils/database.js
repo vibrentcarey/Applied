@@ -25,11 +25,23 @@ export async function getHabits(req, res) {
 }
 
 export async function addHabit(req, res) {
+  let { id, job, company, platform, otherPlatform, link, status, user } = req.body
+console.log('fefgergregergre', otherPlatform, platform)
+  platform = platform === 'other' ? otherPlatform : platform
+  const newJob = {
+    id,
+    job,
+    company,
+    platform,
+    link,
+    status,
+    user
+  }
   try {
     // connect to the database
     const { db } = await connectToDatabase();
     // add the post
-    await db.collection('habits').insertOne(req.body);
+    await db.collection('habits').insertOne(newJob);
     // return a message
     return res.json({
       message: 'Habit added successfully',
@@ -46,14 +58,14 @@ export async function addHabit(req, res) {
 
 export async function deleteHabit(req, res) {
 
-  const { title, user } = req.body;
+  const { id, user } = req.body;
   try {
     // Connecting to the database
     const { db } = await connectToDatabase();
     // deleting the habit
     await db.collection('habits').deleteOne({
       user,
-      title
+      id
     });
     // returning a message
     return res.json({
@@ -71,12 +83,13 @@ export async function deleteHabit(req, res) {
 
 export async function updateHabit(req, res) {
   const { id, user, status } = req.body;
+  console.log(status)
   try {
     // connect to the database
     const { db } = await connectToDatabase();
     // update the length of streak 
     await db.collection('habits').updateOne(
-      { title, user },
+      { id, user },
       { $set: { status: status } }
     );
     // return a message

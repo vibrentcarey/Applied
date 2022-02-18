@@ -72,7 +72,7 @@ const Auth = ({ session }) => {
               </label>
               <input
                 type="text"
-                className="input input-bordered input-primary input-sm"
+                className="input input-bordered input-primary input-sm text-lg"
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 id="email"
@@ -91,7 +91,7 @@ const Auth = ({ session }) => {
                 id="password"
                 placeholder="Enter your password"
                 error={formik.touched.password && formik.errors.password}
-                onBlur={formik.handleBlur} className="input input-bordered input-primary input-sm" />
+                onBlur={formik.handleBlur} className="input input-bordered input-primary input-sm text-lg" />
               <p>{formik.touched.password && formik.errors.password}</p>
             </div>
             <div className="form-control mt-6">

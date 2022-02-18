@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { SiIndeed, SiLinkedin } from "react-icons/si";
+import { SiIndeed, SiLinkedin, SiGlassdoor } from "react-icons/si";
 import { HiExternalLink } from "react-icons/hi";
 import { CgSearchLoading } from "react-icons/cg";
 import { getSession } from "next-auth/client";
@@ -19,7 +19,7 @@ const Jobs = ({ session }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [modalId, setModalId] = useState(null);
   const [modalMode, setModalMode] = useState("");
-  const [select, setSelect] = useState("pending");
+  const [selectStatus, setSelectStatus] = useState("pending");
   const router = useRouter();
 
   const loadData = async (email) => {
@@ -33,7 +33,7 @@ const Jobs = ({ session }) => {
     }
   };
 
-  console.log(habits);
+  console.log(selectStatus);
   useEffect(() => {
     if (session) {
       loadData(session.user.email);
@@ -56,6 +56,12 @@ const Jobs = ({ session }) => {
           <SiLinkedin />
         </td>
       );
+    } else if (text === "glassdoor") {
+      return (
+        <td className="text-primary">
+          <SiGlassdoor/>
+        </td>
+      );
     } else {
       return <td>{text}</td>;
     }
@@ -74,31 +80,42 @@ const Jobs = ({ session }) => {
 
   const handleChange = (event) => {
     console.log(event.target.value);
-    
-    setSelect(event.target.value);
+    setSelectStatus(event.target.value);
   };
 
   const confirmEdit = (id) => {
     setModalId(id);
     setModalMode("edit");
     setModalMessage(
-      <select class="select select-sm max-w-xs select-primary" onChange={handleChange}>
-        <option disabled >
-          Update Status
-        </option>
-        <option value='pending'>Pending</option>
-        <option value='not'>Not Accepted</option>
-        <option value='interview'>Interview</option>
+      <select
+        class="select select-sm max-w-xs select-primary"
+        onChange={handleChange}
+      >
+        <option disabled>Update Status</option>
+        <option value="pending">Pending</option>
+        <option value="not accepted">Not Accepted</option>
+        <option value="interview">Interview</option>
       </select>
     );
     setShowModal(true);
   };
 
- 
-
   const deleteJob = (id) => {
     axios
       .delete("/api/handlers", { data: { id, user: session.user.email } })
+      .then((res) => {
+        loadData(session.user.email);
+        closeModal();
+      });
+  };
+
+  const editJob = (id) => {
+    axios
+      .put("/api/handlers", {
+        id,
+        status: selectStatus,
+        user: session.user.email,
+      })
       .then((res) => {
         loadData(session.user.email);
         closeModal();
@@ -110,7 +127,7 @@ const Jobs = ({ session }) => {
       deleteJob(id);
     }
     if (modalMode === "edit") {
-      // editJob(id);
+      editJob(id);
     }
   };
   return (
@@ -157,11 +174,21 @@ const Jobs = ({ session }) => {
                     {textToLogo(habit.platform)}
                     <td>12/16/2020</td>
                     <td>
-                      <a href="">
+                      <a href={habit.link} target="_blank" rel="noreferrer">
                         <HiExternalLink className="text-secondary text-lg" />
                       </a>
                     </td>
-                    <td className="text-primary">Pending</td>
+                    <td
+                      className={`${
+                        habit.status === "pending"
+                          ? "text-primary"
+                          : "text-secondary"
+                      } ${
+                        habit.status === "interview" && "text-green-500"
+                      } capitalize`}
+                    >
+                      {habit.status}
+                    </td>
                     <td>
                       <FaEdit
                         className="hover:cursor-pointer"

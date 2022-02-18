@@ -15,8 +15,7 @@ export default function Home({ session }) {
     }
   }, [session, router]);
   return (
-
-    <main>
+    <main className=''>
       <Hero />
     </main>
   )
