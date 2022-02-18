@@ -8,7 +8,7 @@ const Header = () => {
     signOut();
   };
   return (
-    <div className="navbar bg-primary shadow-xl rounded-b-sm">
+    <div className="navbar bg-neutral text-primary shadow-xl rounded-b-sm ">
       <div className="navbar-start">
         <Link href="/" passHref>
           <button className="btn btn-ghost normal-case text-xl">Applied</button>
