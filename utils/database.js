@@ -45,6 +45,7 @@ export async function addHabit(req, res) {
 }
 
 export async function deleteHabit(req, res) {
+  console.log(req.body)
   const { title, user } = req.body;
   try {
     // Connecting to the database

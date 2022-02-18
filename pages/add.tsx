@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
+import uuid from 'react-uuid'
 const Add = ({ session }) => {
   const router = useRouter();
 
@@ -53,6 +54,7 @@ const Add = ({ session }) => {
     onSubmit: (values) => {
       console.log(formik.errors);
       const streakInfo = {
+        id: uuid(),
         job: values.job,
         company: values.company,
         platform: values.platform,
