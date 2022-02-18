@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
-
 const Add = ({ session }) => {
   const router = useRouter();
 
@@ -13,7 +12,7 @@ const Add = ({ session }) => {
     try {
       const response = await axios.post("/api/handlers", data);
       console.log(response);
-      router.replace("/");
+      router.replace("/jobs");
     } catch (err) {
       console.log(err);
     }
@@ -65,10 +64,10 @@ const Add = ({ session }) => {
     },
   });
   return (
-    <section className=" w-full h-full flex flex-col items-center ">
-      <h1 className="mt-8 text-center text-4xl font-bold">Add Job</h1>
+    <section className="flex flex-col items-center ">
+      <h1 className="mt-8 text-center text-4xl font-bold text-primary">Add Application</h1>
       <form
-        className="card w-full bg-base-100 shadow-xl mt-8 mb-20 border max-w-sm"
+        className="card w-full bg-base-100 shadow-xl mt-8 mb-20 border max-w-xs md:max-w-sm"
         onSubmit={formik.handleSubmit}
       >
         <div className="card-body prose">
