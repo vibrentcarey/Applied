@@ -95,8 +95,8 @@ const Auth = ({ session }) => {
               <button className="btn btn-primary btn-sm" type='submit'>{loginMode ? 'Login' : 'Sign Up'}</button>
             </div>
           </form>
-          {loginMode && <><h3>New Here? <span className='text-purple-500 font-bold hover:cursor-pointer' onClick={() => setLoginMode(false)}>Sign Up</span></h3></>}
-        {!loginMode && <><h3>Returning? <span className='text-purple-500 font-bold hover:cursor-pointer' onClick={() => setLoginMode(true)}>Login</span></h3></>}
+          {loginMode && <><h3>New Here? <span className='link link-primary font-bold hover:cursor-pointer' onClick={() => setLoginMode(false)}>Sign Up</span></h3></>}
+        {!loginMode && <><h3>Returning? <span className='link link-primary font-bold hover:cursor-pointer' onClick={() => setLoginMode(true)}>Login</span></h3></>}
         </div>
       </div>
     </div>
