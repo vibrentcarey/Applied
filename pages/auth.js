@@ -1,14 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { getSession } from "next-auth/client"
 import { signIn } from 'next-auth/client'
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup'
 import axios from 'axios';
-
+import Alert from '../components/Alert'
 
 const Auth = ({ session }) => {
-  const [loginMode, setLoginMode] = useState(false)
+  const [loginMode, setLoginMode] = useState(true)
+  const initialAlertState = {
+    showAlert: false,
+    alertType: '',
+    alertMessage: ''
+  }
+
+  const alertReducer = (state, action) => {
+    switch (action.type) {
+      case 'success':
+        return {
+          ...state,
+          showAlert: true,
+          alertType: 'alert-success',
+          alertMessage: action.message
+        }
+    }
+  }
+
+  const [alertState, dispatch] = useReducer(alertReducer, initialAlertState)
+
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -41,18 +61,30 @@ const Auth = ({ session }) => {
   }, [session])
 
   async function login(email, password) {
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password
-    })
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password
+      })
+      console.log(result)
+    } catch (err) {
+      console.log(err.message);
+    }
     router.replace('/');
   }
 
   async function signUp(email, password) {
-    const response = await axios.post('/api/auth/signup', { email, password })
-    console.log(response)
-    router.replace('/')
+    try {
+      const response = await axios.post('/api/auth/signup', { email, password })
+      dispatch({ type: 'success', message: response.data })
+      console.log(alertState)
+      setTimeout(() => {
+        router.replace('/')
+      }, 3000)
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -63,9 +95,10 @@ const Auth = ({ session }) => {
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-28">
           <form onSubmit={formik.handleSubmit} className="card-body">
-          <header className='prose'>
-          <h2>{loginMode ? 'Login' : 'Sign Up'} Now!</h2>
-          </header>
+            <header className='prose'>
+              {alertState && alertState.showAlert && <Alert type={alertState.alertType} message={alertState.alertMessage} />}
+              <h2>{loginMode ? 'Login' : 'Sign Up'} Now!</h2>
+            </header>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -79,7 +112,7 @@ const Auth = ({ session }) => {
                 placeholder="Enter your email"
                 onBlur={formik.handleBlur}
               />
-              <p>{formik.touched.email && formik.errors.email}</p>
+              <small className='p-1 text-red-600'>{formik.touched.email && formik.errors.email}</small>
 
             </div>
             <div className="form-control">
@@ -90,16 +123,16 @@ const Auth = ({ session }) => {
                 onChange={formik.handleChange}
                 id="password"
                 placeholder="Enter your password"
-                error={formik.touched.password && formik.errors.password}
-                onBlur={formik.handleBlur} className="input input-bordered input-primary input-sm text-lg" />
-              <p>{formik.touched.password && formik.errors.password}</p>
+                onBlur={formik.handleBlur}
+                className="input input-bordered input-primary input-sm text-lg" />
+              <small className='p-1 text-red-600'>{formik.touched.password && formik.errors.password}</small>
             </div>
             <div className="form-control mt-6">
               <button className="btn btn-primary btn-sm" type='submit'>{loginMode ? 'Login' : 'Sign Up'}</button>
             </div>
           </form>
           {loginMode && <div className='m-4'><h3>New Here? <span className='link link-primary font-bold hover:cursor-pointer' onClick={() => setLoginMode(false)}>Sign Up</span></h3></div>}
-        {!loginMode && <div className='m-4'><h3>Returning? <span className='link link-primary font-bold hover:cursor-pointer' onClick={() => setLoginMode(true)}>Login</span></h3></div>}
+          {!loginMode && <div className='m-4'><h3>Returning? <span className='link link-primary font-bold hover:cursor-pointer' onClick={() => setLoginMode(true)}>Login</span></h3></div>}
         </div>
       </div>
     </div>

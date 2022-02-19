@@ -14,15 +14,14 @@ async function handler(req, res) {
   const { db } = await connectToDatabase();
   const user = await db.collection('users').findOne({ email: email })
   if (user) {
-    res.status(422).json('User already exists')
-    return
+    return res.status(422).json({message: 'User already exists'})
   }
 
   await db.collection('users').insertOne({
     email,
     password: await hashPassword(password)
   })
-  res.status(201).json('created user')
+  res.status(201).json('Successfully created user!')
 }
 
 export default handler

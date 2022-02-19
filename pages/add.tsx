@@ -8,6 +8,7 @@ import uuid from "react-uuid";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import Input from "../components/Input";
 
 const Add = ({ session }) => {
   const router = useRouter();
@@ -50,10 +51,11 @@ const Add = ({ session }) => {
       job: Yup.string()
         .min(3, "Must have 3 characters")
         .max(30, "Must be 20 characters or less")
-        .required("Title is required"),
+        .required("Job is required"),
       company: Yup.string()
         .min(3, "Must have 3 characters")
-        .max(30, "Must be 20 characters or less"),
+        .max(30, "Must be 20 characters or less")
+        .required("Company is required"),
       platform: Yup.string()
         .min(3, "Must have 3 characters")
         .max(30, "Must be 20 characters or less")
@@ -64,7 +66,6 @@ const Add = ({ session }) => {
       link: Yup.string()
         .min(5, "Must have 5 characters")
         .required("Link is required"),
-      // date: Yup.string().required("Resource title is required"),
     }),
     onSubmit: (values) => {
       formatDate(startDate);
@@ -94,25 +95,27 @@ const Add = ({ session }) => {
       >
         <div className="card-body prose">
           <h2 className="card-title">Add Job Application</h2>
-          <label htmlFor="start">Job:</label>
-          <input
-            type="text"
-            placeholder="Enter job title"
-            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
+          {/* Job Input */}
+          <Input
+            label="Job:"
+            handleChange={formik.handleChange}
             value={formik.values.job}
-            onChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={formik.touched.job && formik.errors.job}
             id="job"
+            placeholder="Enter job title"
           />
-          <label htmlFor="start">Company:</label>
-          <input
-            type="text"
-            placeholder="Enter company name"
-            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
+          {/* Company Input */}
+          <Input
+            label="Company:"
+            handleChange={formik.handleChange}
             value={formik.values.company}
-            onChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={formik.touched.company && formik.errors.company}
             id="company"
+            placeholder="Enter company name"
           />
-
+          {/* Platform Input */}
           <label htmlFor="start">Platform:</label>
           <select
             className="select select-sm max-w-xs select-primary"
@@ -126,32 +129,32 @@ const Add = ({ session }) => {
             <option value="other">Other</option>
           </select>
           {formik.values.platform === "other" && (
-            <input
-              className="input input-primary input-sm"
+            <Input
               id="otherPlatform"
-              onChange={formik.handleChange}
+              handleChange={formik.handleChange}
               placeholder="Please specify"
+              handleBlur={formik.handleBlur}
             />
           )}
-
-          <label htmlFor="start">Link:</label>
-          <input
-            type="text"
-            placeholder="Enter job url"
-            className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
+          {/* Link Input */}
+          <Input
+            label="Link:"
+            handleChange={formik.handleChange}
             value={formik.values.link}
-            onChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={formik.touched.link && formik.errors.link}
             id="link"
+            placeholder="Enter job url"
           />
           <label htmlFor="date">Date Applied:</label>
-
+          {/* Date Input */}
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             className="input input-primary input-sm w-full text-lg"
             id="date"
           />
-
+          {/* Submit Button */}
           <div className="justify-end card-actions">
             <button className="btn btn-primary btn-sm mt-4" type="submit">
               Submit
