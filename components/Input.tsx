@@ -39,7 +39,7 @@ const Input = ({
           onBlur={handleBlur}
         />
         {/* Error Message */}
-        <small className="p-1 text-red-600">{error}</small>
+        {error && <small className="p-1 text-red-600">{error}</small>}
       </div>
       </>
   );
