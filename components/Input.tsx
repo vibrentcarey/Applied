@@ -2,11 +2,11 @@ import React from "react";
 interface InputProps {
   label: string;
   value: string;
-  error: string;
+  error: string | false | undefined;
   id: string;
   placeholder: string;
-  handleBlur: () => void;
-  handleChange: () => void;
+  handleBlur: (e: React.ChangeEvent<any>) => void;
+  handleChange: (e: React.ChangeEvent<any>) => void;
 }
 
 const Input = ({
@@ -19,9 +19,12 @@ const Input = ({
   handleChange,
 }: InputProps) => {
   return (
-    <>
+    <div className="form-control">
       {/* Input With Label */}
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className="label">
+        <span className="label-text">{label}</span>
+      </label>
+
       <div>
         <input
           type="text"
@@ -35,7 +38,7 @@ const Input = ({
         {/* Error Message */}
         <small className="p-1 text-red-600">{error}</small>
       </div>
-    </>
+    </div>
   );
 };
 
