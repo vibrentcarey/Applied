@@ -4,8 +4,8 @@ import { getSession, GetSessionOptions } from "next-auth/client";
 import { useRouter } from "next/router";
 import Modal from "../components/Modal";
 import Loader from "../components/Loader";
-import TableRow from "../components/TableRow";
 import EmptyJobs from "../components/EmptyJobs";
+import Table from "../components/Table";
 interface Session {
   session: {
     user: {
@@ -145,17 +145,6 @@ const Jobs = ({ session }: Session) => {
     modalState.modalMode === "delete" ? deleteJob(id) : editJob(id);
   };
   // Headers
-  const tableHeaders = [
-    "",
-    "job",
-    "company",
-    "platform",
-    "date applied",
-    "link",
-    "status",
-    "edit",
-    "delete",
-  ];
 
   return (
     <div className="">
@@ -173,36 +162,11 @@ const Jobs = ({ session }: Session) => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="overflow-x-auto flex flex-col ">
-          <table className="table table-compact w-full bg-base-100 mt-8">
-            <thead>
-              <tr>
-                {tableHeaders.map((header) => (
-                  <th key={header}>{header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {habits &&
-                habits.map((habit, i) => (
-                  <TableRow
-                    key={habit.link + i}
-                    habit={habit}
-                    i={i}
-                    confirmDelete={confirmDelete}
-                    confirmEdit={confirmEdit}
-                  />
-                ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                {tableHeaders.map((header) => (
-                  <th key={header}>{header}</th>
-                ))}
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+        <Table
+          habits={habits && habits}
+          confirmDelete={confirmDelete}
+          confirmEdit={confirmEdit}
+        />
       )}
       {habits.length === 0 && !loading && <EmptyJobs />}
     </div>
