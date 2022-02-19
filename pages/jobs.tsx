@@ -9,18 +9,93 @@ import RiseLoader from "react-spinners/RiseLoader";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Modal from "../components/Modal";
 import Link from "next/link";
+import { useReducer } from "react";
 
-const Jobs = ({ session }) => {
+interface Session {
+  session: {
+    user: {
+      email: string;
+      image: null;
+      name: null;
+    };
+  };
+}
+interface ModalState {
+  showModal: boolean;
+  modalMessage: string;
+  modalTitle: string;
+  modalMode: string;
+  modalId: string;
+}
+const Jobs = ({ session }: Session) => {
+  // Job status state
+  const [selectStatus, setSelectStatus] = useState("pending");
+  // Select status change
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectStatus(event.target.value);
+  };
+  // Modal State
+  const initialModalState = {
+    showModal: false,
+    modalMessage: "",
+    modalTitle: "",
+    modalMode: "",
+    modalId: "",
+  };
+
+  const modalReducer = (
+    state: ModalState,
+    action: { type: string; id?: string }
+  ) => {
+    switch (action.type) {
+      case "edit":
+        return {
+          ...state,
+          showModal: true,
+          modalId: action.id,
+          modalMode: "edit",
+          modalTitle: "Edit Status",
+          modalMessage: (
+            <select
+              className="select select-sm max-w-xs select-primary"
+              onChange={handleChange}
+              defaultValue={selectStatus}
+            >
+              <option disabled>Update Status</option>
+              <option value="pending">Pending</option>
+              <option value="not accepted">Not Accepted</option>
+              <option value="interview">Interview</option>
+            </select>
+          ),
+        };
+      case "delete":
+        return {
+          ...state,
+          showModal: true,
+          modalId: action.id,
+          modalMode: "delete",
+          modalTitle: "Confirm Delete",
+          modalMessage: "Are you sure you want to delete this job?",
+        };
+      case "close":
+        return {
+          ...state,
+          showModal: false,
+        };
+    }
+  };
+  const [modalState, dispatch] = useReducer(modalReducer, initialModalState);
+
+  const confirmEdit = (id: string) => {
+    dispatch({ type: "edit", id });
+  };
+
+  const confirmDelete = (id: string) => {
+    dispatch({ type: "delete", id });
+  };
+
   const [habits, setHabits] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState<string | React.ReactNode>(
-    ""
-  );
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalId, setModalId] = useState('');
-  const [modalMode, setModalMode] = useState("");
-  const [selectStatus, setSelectStatus] = useState("pending");
   const router = useRouter();
 
   const loadData = async (email: string) => {
@@ -68,40 +143,8 @@ const Jobs = ({ session }) => {
     }
   };
 
-  const confirmDelete = (id: string) => {
-    setModalId(id);
-    setModalMode("delete");
-    setModalTitle("Confirm Delete");
-    setModalMessage("Are you sure you want to delete this job?");
-    setShowModal(true);
-  };
-
   const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    console.log(event.target.value);
-    setSelectStatus(event.target.value);
-  };
-
-  const confirmEdit = (id :string) => {
-    setModalId(id);
-    setModalMode("edit");
-    setModalTitle("Edit Status");
-    setModalMessage(
-      <select
-        className="select select-sm max-w-xs select-primary"
-        onChange={handleChange}
-        defaultValue={selectStatus}
-      >
-        <option disabled>Update Status</option>
-        <option value="pending">Pending</option>
-        <option value="not accepted">Not Accepted</option>
-        <option value="interview">Interview</option>
-      </select>
-    );
-    setShowModal(true);
+    dispatch({ type: "close" });
   };
 
   const deleteJob = (id: string) => {
@@ -127,22 +170,18 @@ const Jobs = ({ session }) => {
   };
 
   const submit = (id: string) => {
-    if (modalMode === "delete") {
-      deleteJob(id);
-    }
-    if (modalMode === "edit") {
-      editJob(id);
-    }
+      modalState.modalMode === 'delete' ? deleteJob(id) : editJob(id)
   };
+
   return (
     <div className="">
       <Modal
-        showModal={showModal}
-        message={modalMessage}
+        showModal={modalState.showModal}
+        message={modalState.modalMessage}
         close={closeModal}
         confirm={submit}
-        id={modalId}
-        title={modalTitle}
+        id={modalState.modalId}
+        title={modalState.modalTitle}
       />
       <h1 className="mt-8 text-center text-4xl font-bold text-primary">
         Your Applications
