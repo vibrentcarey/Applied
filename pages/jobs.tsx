@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { SiIndeed, SiLinkedin, SiGlassdoor } from "react-icons/si";
 import { HiExternalLink } from "react-icons/hi";
 import { CgSearchLoading } from "react-icons/cg";
-import { getSession } from "next-auth/client";
+import { getSession, GetSessionOptions } from "next-auth/client";
 import { useRouter } from "next/router";
-import BarLoader from "react-spinners/BarLoader";
-import BounceLoader from "react-spinners/BounceLoader";
-import PuffLoader from "react-spinners/PuffLoader";
 import RiseLoader from "react-spinners/RiseLoader";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Modal from "../components/Modal";
 import Link from "next/link";
+
 const Jobs = ({ session }) => {
   const [habits, setHabits] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [modalId, setModalId] = useState(null);
+  const [modalMessage, setModalMessage] = useState<string | React.ReactNode>(
+    ""
+  );
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalId, setModalId] = useState('');
   const [modalMode, setModalMode] = useState("");
   const [selectStatus, setSelectStatus] = useState("pending");
   const router = useRouter();
 
-  const loadData = async (email) => {
+  const loadData = async (email: string) => {
     setLoading(true);
     try {
       const response = await axios.get(`/api/handlers?user=${email}`);
@@ -42,7 +43,7 @@ const Jobs = ({ session }) => {
     }
   }, [session, router]);
 
-  const textToLogo = (text) => {
+  const textToLogo = (text: string) => {
     console.log(text);
     if (text === "indeed") {
       return (
@@ -59,7 +60,7 @@ const Jobs = ({ session }) => {
     } else if (text === "glassdoor") {
       return (
         <td className="text-primary">
-          <SiGlassdoor/>
+          <SiGlassdoor />
         </td>
       );
     } else {
@@ -67,9 +68,10 @@ const Jobs = ({ session }) => {
     }
   };
 
-  const confirmDelete = (id) => {
+  const confirmDelete = (id: string) => {
     setModalId(id);
     setModalMode("delete");
+    setModalTitle("Confirm Delete");
     setModalMessage("Are you sure you want to delete this job?");
     setShowModal(true);
   };
@@ -78,18 +80,20 @@ const Jobs = ({ session }) => {
     setShowModal(false);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     console.log(event.target.value);
     setSelectStatus(event.target.value);
   };
 
-  const confirmEdit = (id) => {
+  const confirmEdit = (id :string) => {
     setModalId(id);
     setModalMode("edit");
+    setModalTitle("Edit Status");
     setModalMessage(
       <select
-        class="select select-sm max-w-xs select-primary"
-        onChange={handleChange} defaultValue={selectStatus}
+        className="select select-sm max-w-xs select-primary"
+        onChange={handleChange}
+        defaultValue={selectStatus}
       >
         <option disabled>Update Status</option>
         <option value="pending">Pending</option>
@@ -100,7 +104,7 @@ const Jobs = ({ session }) => {
     setShowModal(true);
   };
 
-  const deleteJob = (id) => {
+  const deleteJob = (id: string) => {
     axios
       .delete("/api/handlers", { data: { id, user: session.user.email } })
       .then((res) => {
@@ -109,7 +113,7 @@ const Jobs = ({ session }) => {
       });
   };
 
-  const editJob = (id) => {
+  const editJob = (id: string) => {
     axios
       .put("/api/handlers", {
         id,
@@ -122,7 +126,7 @@ const Jobs = ({ session }) => {
       });
   };
 
-  const submit = (id) => {
+  const submit = (id: string) => {
     if (modalMode === "delete") {
       deleteJob(id);
     }
@@ -138,6 +142,7 @@ const Jobs = ({ session }) => {
         close={closeModal}
         confirm={submit}
         id={modalId}
+        title={modalTitle}
       />
       <h1 className="mt-8 text-center text-4xl font-bold text-primary">
         Your Applications
@@ -168,7 +173,7 @@ const Jobs = ({ session }) => {
               {habits &&
                 habits.map((habit, i) => (
                   <tr key={habit}>
-                    <th >{i + 1}</th>
+                    <th>{i + 1}</th>
                     <td className="capitalize">{habit.job}</td>
                     <td className="capitalize">{habit.company}</td>
                     {textToLogo(habit.platform)}
@@ -221,11 +226,10 @@ const Jobs = ({ session }) => {
           </table>
         </div>
       )}
-      {habits.length === 0 && (
+      {habits.length === 0 && !loading && (
         <p className="text-center m-4">
           Nothing here -{" "}
           <button className="link link-primary">
-            {" "}
             <Link href="/add">Add Application</Link>
           </button>
         </p>
@@ -236,7 +240,7 @@ const Jobs = ({ session }) => {
 
 export default Jobs;
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps(ctx: GetSessionOptions | undefined) {
   return {
     props: {
       session: await getSession(ctx),
