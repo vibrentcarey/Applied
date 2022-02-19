@@ -77,7 +77,7 @@ const Auth = ({ session }: Session) => {
     }
   }, [session]);
 
-  async function login(email, password) {
+  async function login(email: string, password: string) {
     try {
       const result = await signIn("credentials", {
         redirect: false,
@@ -91,7 +91,7 @@ const Auth = ({ session }: Session) => {
     router.replace("/");
   }
 
-  async function signUp(email, password) {
+  async function signUp(email: string, password: string) {
     try {
       const response = await axios.post("/api/auth/signup", {
         email,

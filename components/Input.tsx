@@ -1,8 +1,8 @@
 import React from "react";
 interface InputProps {
-  label: string;
+  label?: string;
   value: string;
-  error: string | false | undefined;
+  error?: string | false | undefined;
   id: string;
   placeholder: string;
   handleBlur: (e: React.ChangeEvent<any>) => void;

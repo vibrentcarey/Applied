@@ -13,7 +13,6 @@ interface Habit {
 
 interface TableProps {
   habits: Habit[];
-  i: number;
   confirmEdit: (id: string) => void;
   confirmDelete: (id: string) => void;
 }

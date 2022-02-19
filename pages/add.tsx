@@ -159,6 +159,7 @@ const Add = ({ session }: Session) => {
               handleChange={formik.handleChange}
               placeholder="Please specify"
               handleBlur={formik.handleBlur}
+              value={formik.values.otherPlatform}
             />
           )}
           {/* Link Input */}
