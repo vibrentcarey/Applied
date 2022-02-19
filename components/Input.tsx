@@ -1,11 +1,27 @@
 import React from "react";
+interface InputProps {
+  label: string;
+  value: string;
+  error: string;
+  id: string;
+  placeholder: string;
+  handleBlur: () => void;
+  handleChange: () => void;
+}
 
-const Input = ({label, handleChange, value, handleBlur, error, id, placeholder}) => {
-  console.log(id)
+const Input = ({
+  label,
+  value,
+  error,
+  id,
+  placeholder,
+  handleBlur,
+  handleChange,
+}: InputProps) => {
   return (
     <>
+      {/* Input With Label */}
       <label htmlFor={id}>{label}</label>
-
       <div>
         <input
           type="text"
@@ -16,6 +32,7 @@ const Input = ({label, handleChange, value, handleBlur, error, id, placeholder})
           id={id}
           onBlur={handleBlur}
         />
+        {/* Error Message */}
         <small className="p-1 text-red-600">{error}</small>
       </div>
     </>

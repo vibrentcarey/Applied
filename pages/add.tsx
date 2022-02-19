@@ -9,7 +9,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Input from "../components/Input";
-import { string } from "yup/lib/locale";
+
 interface Session {
   session: {
     user: {

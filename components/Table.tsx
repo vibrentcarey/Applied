@@ -1,5 +1,23 @@
 import React from "react";
 import TableRow from "./TableRow";
+
+interface Habit {
+  id: string;
+  job: string;
+  company: string;
+  date: string;
+  link: string;
+  status: string;
+  platform: string;
+}
+
+interface TableProps {
+  habits: Habit[];
+  i: number;
+  confirmEdit: (id: string) => void;
+  confirmDelete: (id: string) => void;
+}
+
 const tableHeaders = [
   "",
   "job",
@@ -12,8 +30,8 @@ const tableHeaders = [
   "delete",
 ];
 
-const Table = ({habits, confirmEdit, confirmDelete}) => {
-  console.log(habits)
+const Table = ({ habits, confirmEdit, confirmDelete }: TableProps) => {
+  console.log(habits);
   return (
     <div className="overflow-x-auto flex flex-col ">
       <table className="table table-compact w-full bg-base-100 mt-8">
@@ -26,7 +44,7 @@ const Table = ({habits, confirmEdit, confirmDelete}) => {
         </thead>
         <tbody>
           {habits.length > 0 &&
-            habits.map((habit, i) => (
+            habits.map((habit: Habit, i: number) => (
               <TableRow
                 key={habit.link + i}
                 habit={habit}

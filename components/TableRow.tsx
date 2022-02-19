@@ -1,36 +1,27 @@
 import React from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { HiExternalLink } from "react-icons/hi";
-import { SiIndeed, SiLinkedin, SiGlassdoor } from "react-icons/si";
+import { textToLogo } from "../utils/helpers";
 
-// Convert text to job logo
-const textToLogo = (text: string) => {
-  if (text === "indeed") {
-    return (
-      <td className="text-primary">
-        <SiIndeed />
-      </td>
-    );
-  } else if (text === "linkedin") {
-    return (
-      <td className="text-primary">
-        <SiLinkedin />
-      </td>
-    );
-  } else if (text === "glassdoor") {
-    return (
-      <td className="text-primary">
-        <SiGlassdoor />
-      </td>
-    );
-  } else {
-    return <td className="capitalize">{text}</td>;
-  }
-};
+interface Habit {
+  id: string;
+  job: string;
+  company: string;
+  date: string;
+  link: string;
+  status: string;
+  platform: string;
+}
+interface TableRowProps {
+  habit: Habit;
+  i: number;
+  confirmEdit: (id: string) => void;
+  confirmDelete: (id: string) => void;
+}
 
-const TableRow = ({ habit, i, confirmEdit, confirmDelete }) => {
+const TableRow = ({ habit, i, confirmEdit, confirmDelete }: TableRowProps) => {
   return (
-    <tr key={habit}>
+    <tr key={habit.id}>
       <th>{i + 1}</th>
       <td className="capitalize">{habit.job}</td>
       <td className="capitalize">{habit.company}</td>

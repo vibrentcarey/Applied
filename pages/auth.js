@@ -84,6 +84,7 @@ const Auth = ({ session }) => {
       }, 3000)
     } catch (err) {
       console.log(err)
+      console.log(err.message);
     }
   }
   return (

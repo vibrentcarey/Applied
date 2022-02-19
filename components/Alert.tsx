@@ -1,6 +1,10 @@
 import React from "react";
+interface AlertProps {
+  type: string;
+  message: string;
+}
 
-const Alert = ({type, message}) => {
+const Alert = ({ type, message }: AlertProps) => {
   return (
     <div className={`alert shadow-lg ${type}`}>
       <div>
