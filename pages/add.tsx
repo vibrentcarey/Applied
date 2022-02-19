@@ -30,6 +30,11 @@ interface Application {
   user: string;
   status: string;
 }
+const ReadonlyInput = ({ value, onClick }: any) => (
+  <button className='input input-primary input-sm w-full text-left text-lg' onClick={onClick}>
+    {value}
+  </button>
+);
 
 const Add = ({ session }: Session) => {
   const router = useRouter();
@@ -176,9 +181,9 @@ const Add = ({ session }: Session) => {
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
-            className="input input-primary input-sm w-full text-lg"
             id="date"
             onFocus={(e) => e.target.readOnly = true}
+            customInput = {<ReadonlyInput />}
           />
 
           {/* Submit Button */}
