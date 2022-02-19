@@ -1,5 +1,6 @@
 import React from "react";
 interface InputProps {
+  type?: string;
   label?: string;
   value: string;
   error?: string | false | undefined;
@@ -10,6 +11,7 @@ interface InputProps {
 }
 
 const Input = ({
+  type,
   label,
   value,
   error,
@@ -27,7 +29,7 @@ const Input = ({
 
       <div>
         <input
-          type="text"
+          type={type}
           placeholder={placeholder}
           className="input input-bordered input-primary input-sm text-lg w-full max-w-xs"
           value={value}

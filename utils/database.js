@@ -83,7 +83,6 @@ export async function deleteHabit(req, res) {
 
 export async function updateHabit(req, res) {
   const { id, user, status } = req.body;
-  console.log(status)
   try {
     // connect to the database
     const { db } = await connectToDatabase();

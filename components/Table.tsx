@@ -30,7 +30,6 @@ const tableHeaders = [
 ];
 
 const Table = ({ habits, confirmEdit, confirmDelete }: TableProps) => {
-  console.log(habits);
   return (
     <div className="overflow-x-auto flex flex-col ">
       <table className="table table-compact w-full bg-base-100 mt-8">

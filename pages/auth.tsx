@@ -21,7 +21,7 @@ interface Session {
 interface AlertState {
   showAlert: boolean;
   alertType: string;
-  alertMessage: string
+  alertMessage: string;
 }
 
 const Auth = ({ session }: Session) => {
@@ -137,6 +137,7 @@ const Auth = ({ session }: Session) => {
               error={formik.touched.email && formik.errors.email}
             />
             <Input
+              type="password"
               label="Password"
               value={formik.values.password}
               handleChange={formik.handleChange}
