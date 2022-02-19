@@ -28,12 +28,25 @@ interface ModalState {
   modalId: string;
 }
 const Jobs = ({ session }: Session) => {
-  // Job status state
+  // State values
   const [selectStatus, setSelectStatus] = useState("pending");
+  const [habits, setHabits] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  // Initialize Router
+  const router = useRouter();
   // Select status change
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectStatus(event.target.value);
   };
+  // Load jobs from db
+  useEffect(() => {
+    if (session) {
+      loadData(session.user.email);
+    } else {
+      router.replace("/auth");
+    }
+  }, [session, router]);
+
   // Modal State
   const initialModalState = {
     showModal: false,
@@ -84,8 +97,10 @@ const Jobs = ({ session }: Session) => {
         };
     }
   };
+  // UseReducer for modal
   const [modalState, dispatch] = useReducer(modalReducer, initialModalState);
 
+  // Dispatch functions
   const confirmEdit = (id: string) => {
     dispatch({ type: "edit", id });
   };
@@ -93,11 +108,7 @@ const Jobs = ({ session }: Session) => {
   const confirmDelete = (id: string) => {
     dispatch({ type: "delete", id });
   };
-
-  const [habits, setHabits] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
+  // Api call function
   const loadData = async (email: string) => {
     setLoading(true);
     try {
@@ -108,16 +119,7 @@ const Jobs = ({ session }: Session) => {
       console.log(err);
     }
   };
-
-  console.log(selectStatus);
-  useEffect(() => {
-    if (session) {
-      loadData(session.user.email);
-    } else {
-      router.replace("/auth");
-    }
-  }, [session, router]);
-
+  // Convert text to job logo
   const textToLogo = (text: string) => {
     console.log(text);
     if (text === "indeed") {
@@ -146,7 +148,7 @@ const Jobs = ({ session }: Session) => {
   const closeModal = () => {
     dispatch({ type: "close" });
   };
-
+  // Api call functions
   const deleteJob = (id: string) => {
     axios
       .delete("/api/handlers", { data: { id, user: session.user.email } })
@@ -170,9 +172,20 @@ const Jobs = ({ session }: Session) => {
   };
 
   const submit = (id: string) => {
-      modalState.modalMode === 'delete' ? deleteJob(id) : editJob(id)
+    modalState.modalMode === "delete" ? deleteJob(id) : editJob(id);
   };
-
+  // Headers
+  const tableHeaders = [
+    "",
+    "job",
+    "company",
+    "platform",
+    "date applied",
+    "link",
+    "status",
+    "edit",
+    "delete",
+  ];
   return (
     <div className="">
       <Modal
@@ -197,15 +210,9 @@ const Jobs = ({ session }: Session) => {
           <table className="table table-compact w-full bg-base-100 mt-8">
             <thead>
               <tr>
-                <th></th>
-                <th>Job</th>
-                <th>company</th>
-                <th>Platform</th>
-                <th>Date Applied</th>
-                <th>Link</th>
-                <th>Status</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                {tableHeaders.map((header) => (
+                  <th key={header}>{header}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -250,16 +257,9 @@ const Jobs = ({ session }: Session) => {
             </tbody>
             <tfoot>
               <tr>
-                <th></th>
-                <th>Job</th>
-                <th>company</th>
-                <th>Platform</th>
-                <th>Date Applied</th>
-                <th>Link</th>
-                <th>Status</th>
-                <th>Edit</th>
-
-                <th>Delete</th>
+                {tableHeaders.map((header) => (
+                  <th key={header}>{header}</th>
+                ))}
               </tr>
             </tfoot>
           </table>
