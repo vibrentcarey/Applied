@@ -25,8 +25,7 @@ export async function getHabits(req, res) {
 }
 
 export async function addHabit(req, res) {
-  let { id, job, company, platform, otherPlatform, link, status, user } = req.body
-console.log('fefgergregergre', otherPlatform, platform)
+  let { id, job, company, platform, otherPlatform, link, status, user, date } = req.body
   platform = platform === 'other' ? otherPlatform : platform
   const newJob = {
     id,
@@ -35,7 +34,8 @@ console.log('fefgergregergre', otherPlatform, platform)
     platform,
     link,
     status,
-    user
+    user,
+    date
   }
   try {
     // connect to the database

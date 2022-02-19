@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 import uuid from "react-uuid";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 const Add = ({ session }) => {
   const router = useRouter();
-
+  const [startDate, setStartDate] = useState(new Date());
   const createHabit = async (data) => {
     console.log("trying");
     try {
@@ -26,6 +30,13 @@ const Add = ({ session }) => {
     }
   }, [session, router]);
 
+  const formatDate = (date) => {
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const day = date.getDate();
+
+    return `${month}-${day}-${year}`;
+  };
   const formik = useFormik({
     initialValues: {
       job: "",
@@ -56,7 +67,7 @@ const Add = ({ session }) => {
       // date: Yup.string().required("Resource title is required"),
     }),
     onSubmit: (values) => {
-      console.log(formik.errors);
+      formatDate(startDate);
       const streakInfo = {
         id: uuid(),
         job: values.job,
@@ -64,14 +75,13 @@ const Add = ({ session }) => {
         platform: values.platform,
         otherPlatform: values.otherPlatform,
         link: values.link,
-        date: values.date,
+        date: formatDate(startDate),
         user: session.user.email,
         status: "pending",
       };
       createHabit(streakInfo);
     },
   });
-
 
   return (
     <section className="flex flex-col items-center ">
@@ -133,16 +143,15 @@ const Add = ({ session }) => {
             onChange={formik.handleChange}
             id="link"
           />
+          <label htmlFor="date">Date Applied:</label>
 
-          {/* <label htmlFor="start">Date Applied:</label>
-          <input
-            type="date"
-            name="trip-start"
-            className="outline outline-blue-300 rounded px-2"
-            value={formik.values.date}
-            onChange={formik.handleChange}
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            className="input input-primary input-sm w-full text-lg"
             id="date"
-          ></input> */}
+          />
+
           <div className="justify-end card-actions">
             <button className="btn btn-primary btn-sm mt-4" type="submit">
               Submit

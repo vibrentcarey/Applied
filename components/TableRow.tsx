@@ -35,7 +35,7 @@ const TableRow = ({ habit, i, confirmEdit, confirmDelete }) => {
       <td className="capitalize">{habit.job}</td>
       <td className="capitalize">{habit.company}</td>
       {textToLogo(habit.platform)}
-      <td>12/16/2020</td>
+      <td>{habit.date}</td>
       {/* Link Button */}
       <td>
         <a href={habit.link} target="_blank" rel="noreferrer">
