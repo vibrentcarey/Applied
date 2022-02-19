@@ -9,11 +9,33 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Input from "../components/Input";
+import { string } from "yup/lib/locale";
+interface Session {
+  session: {
+    user: {
+      email: string;
+      image: null;
+      name: null;
+    };
+  };
+}
+interface Application {
+  id: any,
+  job: string,
+  company: string,
+  platform: string,
+  otherPlatform?: string,
+  link: string,
+  date: string,
+  user: string,
+  status: string
+}
 
-const Add = ({ session }) => {
+const Add = ({ session }: Session) => {
   const router = useRouter();
-  const [startDate, setStartDate] = useState(new Date());
-  const createHabit = async (data) => {
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+
+  const createHabit = async (data: Application) => {
     console.log("trying");
     try {
       const response = await axios.post("/api/handlers", data);
@@ -31,13 +53,15 @@ const Add = ({ session }) => {
     }
   }, [session, router]);
 
-  const formatDate = (date) => {
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    const day = date.getDate();
-
+  const formatDate = (date: Date | null) => {
+    if (date) {
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const day = date.getDate();
     return `${month}-${day}-${year}`;
+    }
   };
+
   const formik = useFormik({
     initialValues: {
       job: "",
@@ -67,6 +91,7 @@ const Add = ({ session }) => {
         .min(5, "Must have 5 characters")
         .required("Link is required"),
     }),
+  
     onSubmit: (values) => {
       formatDate(startDate);
       const streakInfo = {
