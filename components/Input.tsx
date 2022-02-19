@@ -21,7 +21,8 @@ const Input = ({
   handleChange,
 }: InputProps) => {
   return (
-    <div className="form-control">
+
+    <>
       {/* Input With Label */}
       <label htmlFor={id}>
         <span className="label-text">{label}</span>
@@ -40,7 +41,7 @@ const Input = ({
         {/* Error Message */}
         <small className="p-1 text-red-600">{error}</small>
       </div>
-    </div>
+      </>
   );
 };
 
