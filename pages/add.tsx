@@ -20,15 +20,15 @@ interface Session {
   };
 }
 interface Application {
-  id: any,
-  job: string,
-  company: string,
-  platform: string,
-  otherPlatform?: string,
-  link: string,
-  date: string,
-  user: string,
-  status: string
+  id: any;
+  job: string;
+  company: string;
+  platform: string;
+  otherPlatform?: string;
+  link: string;
+  date: string;
+  user: string;
+  status: string;
 }
 
 const Add = ({ session }: Session) => {
@@ -36,7 +36,6 @@ const Add = ({ session }: Session) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
 
   const createHabit = async (data: Application) => {
-    console.log("trying");
     try {
       const response = await axios.post("/api/handlers", data);
       console.log(response);
@@ -58,7 +57,7 @@ const Add = ({ session }: Session) => {
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
       const day = date.getDate();
-    return `${month}-${day}-${year}`;
+      return `${month}-${day}-${year}`;
     }
   };
 
@@ -91,7 +90,7 @@ const Add = ({ session }: Session) => {
         .min(5, "Must have 5 characters")
         .required("Link is required"),
     }),
-  
+
     onSubmit: (values) => {
       formatDate(startDate);
       const streakInfo = {
@@ -179,7 +178,9 @@ const Add = ({ session }: Session) => {
             onChange={(date) => setStartDate(date)}
             className="input input-primary input-sm w-full text-lg"
             id="date"
+            onFocus={(e) => e.target.readOnly = true}
           />
+
           {/* Submit Button */}
           <div className="justify-end card-actions">
             <button className="btn btn-primary btn-sm mt-4" type="submit">
