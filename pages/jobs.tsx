@@ -1,16 +1,11 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useReducer } from "react";
 import axios from "axios";
-import { SiIndeed, SiLinkedin, SiGlassdoor } from "react-icons/si";
-import { HiExternalLink } from "react-icons/hi";
-import { CgSearchLoading } from "react-icons/cg";
 import { getSession, GetSessionOptions } from "next-auth/client";
 import { useRouter } from "next/router";
-import RiseLoader from "react-spinners/RiseLoader";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Modal from "../components/Modal";
-import Link from "next/link";
-import { useReducer } from "react";
-
+import Loader from "../components/Loader";
+import TableRow from "../components/TableRow";
+import EmptyJobs from "../components/EmptyJobs";
 interface Session {
   session: {
     user: {
@@ -119,31 +114,6 @@ const Jobs = ({ session }: Session) => {
       console.log(err);
     }
   };
-  // Convert text to job logo
-  const textToLogo = (text: string) => {
-    console.log(text);
-    if (text === "indeed") {
-      return (
-        <td className="text-primary">
-          <SiIndeed />
-        </td>
-      );
-    } else if (text === "linkedin") {
-      return (
-        <td className="text-primary">
-          <SiLinkedin />
-        </td>
-      );
-    } else if (text === "glassdoor") {
-      return (
-        <td className="text-primary">
-          <SiGlassdoor />
-        </td>
-      );
-    } else {
-      return <td className="capitalize">{text}</td>;
-    }
-  };
 
   const closeModal = () => {
     dispatch({ type: "close" });
@@ -186,6 +156,7 @@ const Jobs = ({ session }: Session) => {
     "edit",
     "delete",
   ];
+
   return (
     <div className="">
       <Modal
@@ -200,11 +171,7 @@ const Jobs = ({ session }: Session) => {
         Your Applications
       </h1>
       {loading ? (
-        <div className="flex justify-center w-full my-20">
-          <h3 className="text-secondary mx-2 font-semibold text-lg"></h3>
-          <CgSearchLoading className="text-secondary mx-2 text-4xl" />
-          <RiseLoader color="#E9498C" />{" "}
-        </div>
+        <Loader />
       ) : (
         <div className="overflow-x-auto flex flex-col ">
           <table className="table table-compact w-full bg-base-100 mt-8">
@@ -218,41 +185,13 @@ const Jobs = ({ session }: Session) => {
             <tbody>
               {habits &&
                 habits.map((habit, i) => (
-                  <tr key={habit}>
-                    <th>{i + 1}</th>
-                    <td className="capitalize">{habit.job}</td>
-                    <td className="capitalize">{habit.company}</td>
-                    {textToLogo(habit.platform)}
-                    <td>12/16/2020</td>
-                    <td>
-                      <a href={habit.link} target="_blank" rel="noreferrer">
-                        <HiExternalLink className="text-secondary text-lg" />
-                      </a>
-                    </td>
-                    <td
-                      className={`${
-                        habit.status === "pending"
-                          ? "text-primary"
-                          : "text-secondary"
-                      } ${
-                        habit.status === "interview" && "text-green-500"
-                      } capitalize`}
-                    >
-                      {habit.status}
-                    </td>
-                    <td>
-                      <FaEdit
-                        className="hover:cursor-pointer"
-                        onClick={() => confirmEdit(habit.id)}
-                      />
-                    </td>
-                    <td>
-                      <FaTrashAlt
-                        className="hover:cursor-pointer"
-                        onClick={() => confirmDelete(habit.id)}
-                      />
-                    </td>
-                  </tr>
+                  <TableRow
+                    key={habit.link + i}
+                    habit={habit}
+                    i={i}
+                    confirmDelete={confirmDelete}
+                    confirmEdit={confirmEdit}
+                  />
                 ))}
             </tbody>
             <tfoot>
@@ -265,14 +204,7 @@ const Jobs = ({ session }: Session) => {
           </table>
         </div>
       )}
-      {habits.length === 0 && !loading && (
-        <p className="text-center m-4">
-          Nothing here -{" "}
-          <button className="link link-primary">
-            <Link href="/add">Add Application</Link>
-          </button>
-        </p>
-      )}
+      {habits.length === 0 && !loading && <EmptyJobs />}
     </div>
   );
 };
