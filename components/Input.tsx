@@ -23,7 +23,7 @@ const Input = ({
   return (
     <div className="form-control">
       {/* Input With Label */}
-      <label htmlFor={id} className="label">
+      <label htmlFor={id}>
         <span className="label-text">{label}</span>
       </label>
 
