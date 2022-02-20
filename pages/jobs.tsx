@@ -114,7 +114,7 @@ const Jobs = ({ session }: Session) => {
       } catch (err) {
         console.log(err);
       }
-    }, 500);
+    }, 1000);
   };
 
   const closeModal = () => {
