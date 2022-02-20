@@ -31,8 +31,8 @@ const tableHeaders = [
 
 const Table = ({ habits, confirmEdit, confirmDelete }: TableProps) => {
   return (
-    <div className="overflow-x-auto flex flex-col ">
-      <table className="table table-compact w-full bg-base-100 mt-8">
+    <div className="overflow-x-auto flex flex-col z-10">
+      <table className="table table-compact w-full bg-base-100 z-10">
         <thead>
           <tr>
             {tableHeaders.map((header) => (

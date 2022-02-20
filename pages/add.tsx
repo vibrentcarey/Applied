@@ -30,11 +30,12 @@ interface Application {
   user: string;
   status: string;
 }
-const ReadonlyInput = ({ value, onClick }: any) => (
+// eslint-disable-next-line react/display-name
+const ReadonlyInput = React.forwardRef(({ value, onClick }: any) => (
   <button className='input input-primary input-sm w-full text-left text-lg' onClick={onClick}>
     {value}
   </button>
-);
+));
 
 const Add = ({ session }: Session) => {
   const router = useRouter();
@@ -114,12 +115,12 @@ const Add = ({ session }: Session) => {
   });
 
   return (
-    <section className="flex flex-col items-center ">
+    <section className="flex flex-col items-center z-10">
       <h1 className="mt-8 text-center text-4xl font-bold text-primary">
         Add Application
       </h1>
       <form
-        className="card w-full bg-base-100 shadow-xl mt-8 mb-20 border max-w-xs md:max-w-sm"
+        className="card w-full bg-base-100 shadow-xl mt-8 mb-20 border max-w-xs md:max-w-sm z-10"
         onSubmit={formik.handleSubmit}
       >
         <div className="card-body prose">

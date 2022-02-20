@@ -106,13 +106,15 @@ const Jobs = ({ session }: Session) => {
   // Api call function
   const loadData = async (email: string) => {
     setLoading(true);
-    try {
-      const response = await axios.get(`/api/handlers?user=${email}`);
-      setHabits(response.data.message);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
+    setTimeout(async () => {
+      try {
+        const response = await axios.get(`/api/handlers?user=${email}`);
+        setHabits(response.data.message);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 500);
   };
 
   const closeModal = () => {
@@ -147,7 +149,7 @@ const Jobs = ({ session }: Session) => {
   // Headers
 
   return (
-    <div className="">
+    <div >
       <Modal
         showModal={modalState.showModal}
         message={modalState.modalMessage}
