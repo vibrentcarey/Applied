@@ -108,7 +108,7 @@ const Auth = ({ session }: Session) => {
   }
   return (
     <div className="hero min-h-screen bg-base-200">
-      <div className="flex-col hero-content lg:flex-row-reverse">
+      <div className="flex-col hero-content lg:flex-row-reverse z-10">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl text-primary font-bold">Applied</h1>
           <p className="py-6">
@@ -116,8 +116,8 @@ const Auth = ({ session }: Session) => {
             applications in one convenient place.
           </p>
         </div>
-        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-28">
-          <form onSubmit={formik.handleSubmit} className="card-body">
+        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-20 z-10">
+          <form onSubmit={formik.handleSubmit} className="card-body z-10">
             <header className="prose">
               {alertState && alertState.showAlert && (
                 <Alert
