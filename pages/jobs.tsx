@@ -6,22 +6,9 @@ import Modal from "../components/Modal";
 import Loader from "../components/Loader";
 import EmptyJobs from "../components/EmptyJobs";
 import Table from "../components/Table";
-interface Session {
-  session: {
-    user: {
-      email: string;
-      image: null;
-      name: null;
-    };
-  };
-}
-interface ModalState {
-  showModal: boolean;
-  modalMessage: string;
-  modalTitle: string;
-  modalMode: string;
-  modalId: string;
-}
+import {Session} from '../models/session'
+import { ModalState } from "../models/modal";
+
 const Jobs = ({ session }: Session) => {
   // State values
   const [selectStatus, setSelectStatus] = useState("pending");

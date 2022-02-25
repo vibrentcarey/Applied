@@ -7,22 +7,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import Alert from "../components/Alert";
 import Input from "../components/Input";
-
-interface Session {
-  session: {
-    user: {
-      email: string;
-      image: null;
-      name: null;
-    };
-  };
-}
-
-interface AlertState {
-  showAlert: boolean;
-  alertType: string;
-  alertMessage: string;
-}
+import {Session} from '../models/session'
+import { AlertState } from "../models/alert";
 
 const Auth = ({ session }: Session) => {
   const [loginMode, setLoginMode] = useState(true);
